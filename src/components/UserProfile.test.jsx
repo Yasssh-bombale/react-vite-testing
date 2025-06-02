@@ -1,32 +1,30 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import {expect,it,describe,vi, beforeEach, afterEach} from "vitest"
+import {screen,render, waitFor} from "@testing-library/react"
 import UserProfile from "./UserProfile";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import userEvent from "@testing-library/user-event";
-import "@testing-library/jest-dom/vitest";
+import "@testing-library/jest-dom/vitest"
 
-describe("UserProfile", () => {
-  beforeEach(() => {
-    global.fetch = vi.fn();
-  });
+describe('UserProfile', () => { 
+    beforeEach(()=>{
+        global.fetch=vi.fn()
+    })
 
-  afterEach(() => {
-    vi.resetAllMocks();
-  });
+    afterEach(()=>{
+        vi.resetAllMocks()
+    })
 
-  it("fetches and displays the user data", async () => {
-    global.fetch.mockResolvedValueOnce({
-      json: async () => ({ id: 4, name: "John", email: "john@gmail.com" }),
-    });
-    render(<UserProfile userId={4} />);
+    it("Fetches and displays the userData",async()=>{
+        global.fetch.mockResolvedValueOnce({
+            json:async()=>({id:4,name:"john",email:"john@gmail.com"})
+        })
 
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+        render(<UserProfile userId={4}/>)
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole("heading", { name: /john/i })
-      ).toBeInTheDocument();
-      expect(screen.getByText(/john@gmail.com/i)).toBeInTheDocument();
-    });
-  });
-});
+        expect(screen.getByText(/loading/i)).toBeInTheDocument()
+
+        await waitFor(()=>{
+            expect(screen.getByRole("heading",{name:/john/i})).toBeInTheDocument()
+            expect(screen.getByText(/john@gmail.com/i)).toBeInTheDocument()
+        })
+    })
+ })
